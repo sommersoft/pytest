@@ -41,7 +41,9 @@ jobs:
       with:
         fetch-depth: 0
         repository: ${{ matrix.repo }}
-        path: $HOME/${{ matrix.name }}
+        path: $CLONE_PATH
+      env:
+        CLONE_PATH: $HOME/${{ matrix.name }}
     - name: where are the tox.ini's?
       run: |
         find -name tox.ini -ls
