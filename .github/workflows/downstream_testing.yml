@@ -41,10 +41,9 @@ jobs:
       with:
         fetch-depth: 0
         repository: ${{ matrix.repo }}
-        path: $GITHUB_WORKSPACE/${{ matrix.name }}
     - name: where are the tox.ini's?
       run: |
-        ls -l $GITHUB_WORKSPACE/${{ matrix.name }}
+        find -name tox.ini
     - name: Run ${{ matrix.name }} tox
       run: |
         tox -c $GITHUB_WORKSPACE/${{ matrix.name }}/tox.ini -e ${{ matrix.tox_env }}
