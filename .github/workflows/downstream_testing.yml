@@ -41,7 +41,7 @@ jobs:
       with:
         fetch-depth: 0
         repository: ${{ matrix.repo }}
-        path: $HOME/${{ matrix.name }}"
+        path: $HOME/${{ matrix.name }}
     - name: where are the tox.ini's?
       run: |
         ls -l $HOME/${{ matrix.name }}
