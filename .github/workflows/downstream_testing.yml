@@ -15,6 +15,7 @@ jobs:
       matrix:
         name: [
           "pytest-html",
+          "pytest-django"
         ]
 
         include:
@@ -23,6 +24,11 @@ jobs:
             os: ubuntu-latest
             repo: "pytest-dev/pytest-html"
             tox_env: "devel"
+          - name: "pytest-django"
+            python: "3.9"
+            os: ubuntu-latest
+            repo: "pytest-dev/pytest-django"
+            tox_env: "testenv"
 
     steps:
     - uses: actions/checkout@v2
