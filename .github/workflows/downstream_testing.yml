@@ -1,0 +1,52 @@
+name: downstream_testing
+
+on:
+  push:
+    branches:
+      - downstream_testing
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [
+          "pytest-html",
+        ]
+
+        include:
+          - name: "pytest-html"
+            python: "3.9"
+            os: ubuntu-latest
+            repo: "pytest-dev/pytest-html"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox coverage
+    - name: Install ${{ matrix.name }}
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        repository: ${{ matrix.repo }}
+        path: $GITHUB_WORKSPACE/${{ matrix.name }}
+      run: |
+        pip install -e $GITHUB_WORKSPACE/${{ matrix.name }}
+    - name: Force Reinstall PyTest
+      run: |
+        pip install --force-reinstall -e $GITHUB_WORKSPACE/pytest
+    - name: Run ${{ matrix.name }} tox
+      run: |
+        tox --workdir $GITHUB_WORKSPACE/${{ matrix.name }}
+
