@@ -22,7 +22,7 @@ jobs:
             python: "3.9"
             os: ubuntu-latest
             repo: "pytest-dev/pytest-html"
-            tox_env: ""
+            tox_env: "devel"
 
     steps:
     - uses: actions/checkout@v2
