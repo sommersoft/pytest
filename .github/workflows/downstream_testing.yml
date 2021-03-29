@@ -28,7 +28,7 @@ jobs:
             python: "3.9"
             os: ubuntu-latest
             repo: "pytest-dev/pytest-django"
-            tox_env: "testenv"
+            tox_env: "pytest"
 
     steps:
     - uses: actions/checkout@v2
