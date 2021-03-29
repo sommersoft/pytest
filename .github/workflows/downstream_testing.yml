@@ -23,12 +23,12 @@ jobs:
             python: "3.9"
             os: ubuntu-latest
             repo: "pytest-dev/pytest-html"
-            tox_env: "devel"
+            tox_env: "-e devel"
           - name: "pytest-django"
             python: "3.9"
             os: ubuntu-latest
             repo: "pytest-dev/pytest-django"
-            tox_env: "pytest"
+            tox_env: "py39"
 
     steps:
     - uses: actions/checkout@v2
@@ -53,4 +53,4 @@ jobs:
         find -name tox.ini -ls
     - name: Run ${{ matrix.name }} tox
       run: |
-        tox -c $GITHUB_WORKSPACE/${{ matrix.name }}/tox.ini -e ${{ matrix.tox_env }}
+        tox -c $GITHUB_WORKSPACE/${{ matrix.name }}/tox.ini ${{ matrix.tox_env }}
