@@ -41,12 +41,6 @@ jobs:
         fetch-depth: 0
         repository: ${{ matrix.repo }}
         path: $GITHUB_WORKSPACE/${{ matrix.name }}
-    - name: Install ${{ matrix.name }}
-      run: |
-        pip install -e $GITHUB_WORKSPACE/${{ matrix.name }}
-    - name: Force Reinstall PyTest
-      run: |
-        pip install --force-reinstall -e $GITHUB_WORKSPACE/pytest
     - name: Run ${{ matrix.name }} tox
       run: |
         tox --workdir $GITHUB_WORKSPACE/${{ matrix.name }}
