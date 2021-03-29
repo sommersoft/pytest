@@ -44,7 +44,7 @@ jobs:
         path: $HOME/${{ matrix.name }}
     - name: where are the tox.ini's?
       run: |
-        ls -l $HOME/${{ matrix.name }}
+        find -name tox.ini -ls
     - name: Run ${{ matrix.name }} tox
       run: |
         tox -c $HOME/${{ matrix.name }}/tox.ini -e ${{ matrix.tox_env }}
