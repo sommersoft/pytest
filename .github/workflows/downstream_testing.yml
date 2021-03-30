@@ -22,12 +22,12 @@ jobs:
           - name: "pytest-html"
             python: "3.9"
             os: ubuntu-latest
-            repo: "pytest-dev/pytest-html"
+            repo: "pytest-dev/pytest-html@master"
             tox_env: "-e devel"
           - name: "pytest-django"
             python: "3.9"
             os: ubuntu-latest
-            repo: "pytest-dev/pytest-django"
+            repo: "pytest-dev/pytest-django@master"
             tox_env: ""
 
     steps:
