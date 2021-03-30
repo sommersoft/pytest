@@ -31,26 +31,28 @@ jobs:
             tox_env: ""
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Set up Python ${{ matrix.python }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install tox coverage
-    - name: Checkout ${{ matrix.name }}
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        repository: ${{ matrix.repo }}
-        path: ${{ matrix.name }}
-    - name: where are the tox.ini's?
-      run: |
-        find -name tox.ini -ls
-    - name: Run ${{ matrix.name }} tox
-      run: |
-        tox -c $GITHUB_WORKSPACE/${{ matrix.name }}/tox.ini ${{ matrix.tox_env }}
+    - name: Run Target's Action
+      uses: ${{ matrix.repo }}
+    #- uses: actions/checkout@v2
+    #  with:
+    #    fetch-depth: 0
+    #- name: Set up Python ${{ matrix.python }}
+    #  uses: actions/setup-python@v2
+    #  with:
+    #    python-version: ${{ matrix.python }}
+    #- name: Install dependencies
+    #  run: |
+    #    python -m pip install --upgrade pip
+    #    pip install tox coverage
+    #- name: Checkout ${{ matrix.name }}
+    #  uses: actions/checkout@v2
+    #  with:
+    #    fetch-depth: 0
+    #    repository: ${{ matrix.repo }}
+    #    path: ${{ matrix.name }}
+    #- name: where are the tox.ini's?
+    #  run: |
+    #    find -name tox.ini -ls
+    # name: Run ${{ matrix.name }} tox
+    #  run: |
+    #    tox -c $GITHUB_WORKSPACE/${{ matrix.name }}/tox.ini ${{ matrix.tox_env }}
