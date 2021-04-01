@@ -51,11 +51,13 @@ jobs:
         find -name ${{ matrix.workflow_name }}
     - name: Run Downstream Runner
       run: |
-        cd .github/workflows/utils
-        python -m downstream_runner $GITHUB_WORKSPACE/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }} ${{ matrix.jobs }}
-    #- name: where are the tox.ini's?
-    #  run: |
-    #    find -name tox.ini -ls
-    # name: Run ${{ matrix.name }} tox
-    #  run: |
-    #    tox -c $GITHUB_WORKSPACE/${{ matrix.name }}/tox.ini ${{ matrix.tox_env }}
+        python -m testing.downstream_testing.downstream_runner $DS_YAML $DS_JOBS
+      with:
+        env:
+          - DS_YAML: $GITHUB_WORKSPACE/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
+          - DS_JOBS: ${{ matrix.jobs }}
+    - name: Run Downstream Runner Docker
+      uses: ./testing/downstream_testing
+      with:
+        - DS_YAML: $GITHUB_WORKSPACE/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
+        - DS_JOBS: ${{ matrix.jobs }}

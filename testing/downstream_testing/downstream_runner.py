@@ -1,5 +1,5 @@
 import argparse
-from collections import namedtuple
+from collections import namedtuple, UserDict
 from pprint import pprint
 import re
 import subprocess
@@ -26,18 +26,48 @@ parser.add_argument(
     help="Exclude these matrix names."
 )
 
-def split_matrix_name_outputs(expr, matrix):
+def _split_matrix_name_outputs(expr, matrix):
     """ Supply a suitable output for instances of 'split-matrix-name-outputs'
     """
-    print(expr, matrix)
     output = matrix.name.split("-")
     index = int(expr[expr.rfind("_")+1:])
     return output[index]
 
-
+def _matrix_expr(expr, matrix):
+    """ Supply the suitable matrix context variable.
+    """
+    matrix_key = expr.split(".")[1]
+    return matrix._asdict()[matrix_key.strip()]
+    
 STEP_SUBPARSER_CMDS = {
-    "steps.split-matrix-name.outputs._0": split_matrix_name_outputs,
+    "steps.split-matrix-name.outputs._0": _split_matrix_name_outputs,
+    "matrix": _matrix_expr,
 }
+
+class ExpressionDispatch(UserDict):
+    """ Utility class to dispatch '${{ <expr> }}' expressions to an appropriate handler.
+    """
+    def __init__(self):
+        super().__init__(STEP_SUBPARSER_CMDS)
+
+    def __contains__(self, item):
+        if item in self.data:
+            return True
+        for key in self.data.keys():
+            print(f"item: {item} | key: {key}")
+            if item.startswith(key):
+                return True
+        return False
+
+    def dispatch(self, expr, matrix):
+        """ Find, call, and return the appropriate expression handler.
+        """
+        if expr in self.data:
+            return self.data[expr](expr, matrix)
+        for key in self.data.keys():
+            if expr.startswith(key):
+                return self.data[key](expr, matrix)
+        return expr
 
 matrix_nt = namedtuple(
     "matrix",
@@ -58,6 +88,7 @@ class DownstreamRunner:
         self.job_names = kwargs.get("jobs")
         self._matrix = None
         self._steps = None
+        self.matrix_dispather = ExpressionDispatch()
 
     def __repr__(self):
         return f"DownstreamRunner(job_names={self.job_names}, matrix={self.matrix}, steps={self.steps}"
@@ -69,8 +100,8 @@ class DownstreamRunner:
             for job in self.job_names:
                 if job not in matrix_items:
                     matrix_items[job] = []
+                matrix_items["runs-on"] = self.yaml_tree["jobs"][job].get("runs-on")
                 for item in self.yaml_tree["jobs"][job]["strategy"]["matrix"]["include"]:
-                    #print(f"{item['name']} in {self.matrix_exclude} {item['name'] in self.matrix_exclude}")
                     if item["name"] not in self.matrix_exclude:
                         matrix_items[job].append(
                             matrix_nt(
@@ -104,17 +135,16 @@ class DownstreamRunner:
                 for step in self.steps[job]:
                     this_step = step.copy()
                     if "run" in this_step:
-                        for expr in re.finditer(r"\$\{\{\s*(?P<expr>.+)\s*\}\}", this_step["run"]):
+                        for expr in re.finditer(r"\${{\s*(?P<expr>.+)\s*}}", this_step["run"]):
                             expr_text = expr.group("expr")
-                            if expr_text in STEP_SUBPARSER_CMDS:
-                                sub_text = STEP_SUBPARSER_CMDS[expr_text](expr_text, matrix)
+                            if expr_text in self.matrix_dispather:
+                                sub_text = self.matrix_dispather.dispatch(expr_text, matrix)
                                 this_step["run"] = re.sub(r"\${{\s*.+\s*}}", sub_text, this_step["run"])
                     run[matrix.name].append(this_step)
         return run
 
 if __name__ == "__main__":
     cli_args = parser.parse_args()
-    #print(cli_args)
     runner_args = {
         "yaml_source": cli_args.source[0],
         "jobs": cli_args.jobs,

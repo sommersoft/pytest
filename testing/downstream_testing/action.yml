@@ -1,0 +1,24 @@
+# action.yml
+name: "Downstream Runner - Docker"
+description: "Docker container to run downstream tests for pytest."
+inputs:
+  DS_YAML:
+    description: "Location of Actions workflow YAML file to use."
+    required: true
+  
+  DS_JOBS:
+    description: "The name(s) of the jobs to use from the YAML file."
+    required: true
+
+  DS_EXCLUDE:
+    description: "Matrix items to exclude from the jobs."
+    required: false
+    default: ""
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.DS_YAML }}
+    - ${{ inputs.DS_JOBS }}
+    - ${{ inputs.DS_EXCLUDE }}
