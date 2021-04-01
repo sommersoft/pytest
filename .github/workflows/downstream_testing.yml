@@ -13,45 +13,42 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        name: [
-          "pytest-html",
-          "pytest-django"
-        ]
-
         include:
           - name: "pytest-html"
             python: "3.9"
             os: ubuntu-latest
             repo: "pytest-dev/pytest-html"
-            tox_env: "-e devel"
+            jobs: "build_python"
             workflow_name: "actions.yml"
           - name: "pytest-django"
             python: "3.9"
             os: ubuntu-latest
             repo: "pytest-dev/pytest-django"
-            tox_env: ""
+            jobs: "test"
             workflow_name: "main.yml"
 
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    #- name: Set up Python ${{ matrix.python }}
-    #  uses: actions/setup-python@v2
-    #  with:
-    #    python-version: ${{ matrix.python }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install tox coverage
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+    #- name: Install dependencies
+    #  run: |
+    #    python -m pip install --upgrade pip
+    #    pip install tox coverage
     - name: Checkout ${{ matrix.name }}
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
         repository: ${{ matrix.repo }}
         path: ${{ matrix.name }}
-    - name: Run ${{ matrix.name }}'s Workflow
-      uses: ${{ matrix.name }}/.github/workflows/${{ workflow_name }}
+    - name: Run Downstream Runner
+      run: |
+        cd .github/workflows/utils
+        python -m downstream_runner $GITHUB_WORKSPACE/${{ matrix.repo }}/${{ matrix.workflow_name }} ${{ matrix.jobs }}
     #- name: where are the tox.ini's?
     #  run: |
     #    find -name tox.ini -ls
