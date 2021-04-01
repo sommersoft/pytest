@@ -47,6 +47,7 @@ jobs:
         path: ${{ matrix.name }}
     - name: find me some yamls
       run: |
+        pwd
         find -name ${{ matrix.workflow_name }}
     - name: Run Downstream Runner
       run: |
