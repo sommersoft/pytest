@@ -7,4 +7,6 @@ COPY downstream_runner.py /downstream_runner.py
 
 RUN pip install --no-cache-dir pyyaml
 
-CMD ["python", "downstream_runner", $DS_YAML, $DS_JOBS, $DS_EXCLUDE]
+CMD ["find", "-name", "*.yml"]
+
+CMD ["python", "-m", "downstream_runner", $DS_YAML, $DS_JOBS, $DS_EXCLUDE]
