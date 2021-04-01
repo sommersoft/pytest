@@ -52,7 +52,7 @@ jobs:
     - name: Run Downstream Runner
       run: |
         cd .github/workflows/utils
-        python -m downstream_runner $GITHUB_WORKSPACE/${{ matrix.repo }}/.github/workflows/${{ matrix.workflow_name }} ${{ matrix.jobs }}
+        python -m downstream_runner $GITHUB_WORKSPACE/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }} ${{ matrix.jobs }}
     #- name: where are the tox.ini's?
     #  run: |
     #    find -name tox.ini -ls
