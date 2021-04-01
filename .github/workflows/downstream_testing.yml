@@ -53,10 +53,10 @@ jobs:
       run: |
         python -m testing.downstream_testing.downstream_runner $DS_YAML $DS_JOBS
       env:
-        DS_YAML: $GITHUB_WORKSPACE/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
+        DS_YAML: ${{ github.workspace }}/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}
     - name: Run Downstream Runner Docker
       uses: ./testing/downstream_testing
       with:
-        DS_YAML: $GITHUB_WORKSPACE/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
+        DS_YAML: ${{ github.workspace }}/${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}
