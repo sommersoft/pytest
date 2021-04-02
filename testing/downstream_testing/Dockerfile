@@ -5,8 +5,8 @@ FROM $ACTION_IMAGE
 COPY entrypoint.sh /entrypoint.sh
 #COPY downstream_runner.py /downstream_runner.py
 
-RUN sudo apt-get update && \
-    sudo apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev\
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev && \
     curl https://pyenv.run | bash
