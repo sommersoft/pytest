@@ -3,6 +3,7 @@ ARG ACTION_IMAGE=python:3.8
 FROM $ACTION_IMAGE
 
 COPY entrypoint.sh /entrypoint.sh
+COPY python-versions.txt ./
 #COPY downstream_runner.py /downstream_runner.py
 
 RUN apt-get update
@@ -15,9 +16,8 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 RUN curl https://pyenv.run | bash
 
-RUN pip install --no-cache-dir pyyaml
+RUN xargs -a pyenv-versions.txt -n 1 pyenv install
 
-ONBUILD COPY python-versions.txt ./
-ONBUILD RUN xargs -a pyenv-versions.txt -n 1 pyenv install
+RUN pip install --no-cache-dir pyyaml
 
 ENTRYPOINT [ "/entrypoint.sh" ]
