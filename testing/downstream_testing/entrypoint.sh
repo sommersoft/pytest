@@ -1,8 +1,8 @@
 #!/bin/sh
 
-ls
+ls -CR
 
-find -name *.yml
+find -path **/*.yml
 
 python -V
 
