@@ -3,7 +3,7 @@ ARG ACTION_IMAGE=python:3.8
 FROM $ACTION_IMAGE
 
 COPY entrypoint.sh /entrypoint.sh
-COPY python-versions.txt ./
+COPY pyenv-versions.txt ./
 #COPY downstream_runner.py /downstream_runner.py
 
 RUN apt-get update
