@@ -7,8 +7,8 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN apt-get update
 RUN apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
-    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev\
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev && \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 RUN curl https://pyenv.run | bash
 
 ENV PYENV_ROOT="$HOME/.pyenv"
