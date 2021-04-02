@@ -54,7 +54,6 @@ class ExpressionDispatch(UserDict):
         if item in self.data:
             return True
         for key in self.data.keys():
-            print(f"item: {item} | key: {key}")
             if item.startswith(key):
                 return True
         return False
@@ -74,6 +73,23 @@ matrix_nt = namedtuple(
     ["name", "os", "python", "python_version", "allow_failure"],
     defaults=[None, None, None, None, None]
 )
+
+def match_pyenv(version):
+    """ Match the pyenv installed full Python version to `version`
+    """
+    pyenv_versions = subprocess.run(
+        ("pyenv", "versions"),
+        capture_output=True,
+        encoding="utf-8",
+        errors="ignore",
+        check=True
+    )
+
+    for pyenv_version in pyenv_versions.stdout.split("\n"):
+        pyenv_version = pyenv_version.lstrip(" *")
+        pyenv_version = re.sub(r"\s\(.+\)$", "", pyenv_version)
+        if pyenv_version.startswith(version):
+            return pyenv_version
 
 class DownstreamRunner:
     # TODO: actualize args vs **kwargs
@@ -102,6 +118,8 @@ class DownstreamRunner:
                     matrix_items[job] = []
                 matrix_items["runs-on"] = self.yaml_tree["jobs"][job].get("runs-on")
                 for item in self.yaml_tree["jobs"][job]["strategy"]["matrix"]["include"]:
+                    if not item.get("os", "ubuntu").startswith("ubuntu"):
+                        continue
                     if item["name"] not in self.matrix_exclude:
                         matrix_items[job].append(
                             matrix_nt(
@@ -132,6 +150,14 @@ class DownstreamRunner:
         for job in self.job_names:
             for matrix in self.matrix[job]:
                 run[matrix.name] = []
+                if any([matrix.python, matrix.python_version]):
+                    py_version = matrix.python if matrix.python is not None else matrix.python_version
+                    print(f"py_version: {py_version}")
+                    run[matrix.name].append({
+                        "name": "Set pyenv version",
+                        "run": f"pyenv global {match_pyenv(str(py_version))}"
+                    })
+
                 for step in self.steps[job]:
                     this_step = step.copy()
                     if "run" in this_step:

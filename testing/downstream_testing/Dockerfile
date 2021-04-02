@@ -17,6 +17,7 @@ RUN curl https://pyenv.run | bash
 
 RUN pip install --no-cache-dir pyyaml
 
-#CMD [ "python", "-m", "downstream_runner", $DS_YAML, $DS_JOBS, $DS_EXCLUDE]
+ONBUILD COPY python-versions.txt ./
+ONBUILD RUN xargs -a pyenv-versions.txt -n 1 pyenv install
 
 ENTRYPOINT [ "/entrypoint.sh" ]
