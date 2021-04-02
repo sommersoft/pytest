@@ -8,8 +8,9 @@ COPY entrypoint.sh /entrypoint.sh
 RUN apt-get update && \
     apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev\
-    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev && \
-    curl https://pyenv.run | bash
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    
+SHELL [ "bash", "curl", "https://pyenv.run", "|", "bash"]
 
 
 RUN pip install --no-cache-dir pyyaml
