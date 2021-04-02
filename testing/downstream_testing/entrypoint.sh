@@ -1,9 +1,5 @@
 #!/bin/sh
 
-echo $(find -path **/*.yml)
-
-cd $GITHUB_WORKSPACE
-
 echo $(pwd)
 
 ls -g
