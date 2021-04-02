@@ -3,7 +3,7 @@ ARG ACTION_IMAGE=python:3.8
 FROM $ACTION_IMAGE
 
 COPY entrypoint.sh /entrypoint.sh
-COPY downstream_runner.py /downstream_runner.py
+COPY downstream_runner.py /github/workspace/downstream_runner.py
 
 RUN pip install --no-cache-dir pyyaml
 
