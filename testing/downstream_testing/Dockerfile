@@ -10,7 +10,7 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
-ENV PYENV_ROOT root/.pyenv
+ENV PYENV_ROOT /root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 RUN curl https://pyenv.run | bash
