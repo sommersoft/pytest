@@ -13,7 +13,7 @@ RUN apt-get update && \
 SHELL [ "bash", "curl", "https://pyenv.run", "|", "bash"]
 
 
-RUN pip install --no-cache-dir pyyaml
+#RUN pip install --no-cache-dir pyyaml
 
 #CMD [ "python", "-m", "downstream_runner", $DS_YAML, $DS_JOBS, $DS_EXCLUDE]
 
