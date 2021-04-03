@@ -131,7 +131,7 @@ class DownstreamRunner:
         self.expr_dispatcher = ExpressionDispatch()
 
     def __repr__(self):
-        return f"DownstreamRunner(repo={self.repo}, job_names={self.job_names}, matrix={self.matrix}, steps={self.steps}"
+        return f"DownstreamRunner(repo={self.repo}, job_names={self.job_names}, matrix={self.matrix}, steps={self.steps})"
 
     @property
     def matrix(self):
