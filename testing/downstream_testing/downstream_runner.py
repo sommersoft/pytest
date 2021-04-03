@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "repo",
-    nargs=1,
+    #nargs=1,
     help="Name of the repo."
 )
 parser.add_argument(
@@ -131,7 +131,7 @@ class DownstreamRunner:
         self.expr_dispatcher = ExpressionDispatch()
 
     def __repr__(self):
-        return f"DownstreamRunner(job_names={self.job_names}, matrix={self.matrix}, steps={self.steps}"
+        return f"DownstreamRunner(repo={self.repo}, job_names={self.job_names}, matrix={self.matrix}, steps={self.steps}"
 
     @property
     def matrix(self):
@@ -231,12 +231,13 @@ class DownstreamRunner:
 if __name__ == "__main__":
     cli_args = parser.parse_args()
     runner_args = {
+        "repo": cli_args.repo,
         "yaml_source": cli_args.source[0],
         "jobs": cli_args.jobs,
         "matrix_exclude": cli_args.matrix_exclude,
     }
     runner = DownstreamRunner(**runner_args)
-    #print(runner)
+    print(runner)
     #print()
     #pprint(runner.build_run())
-    runner.run()
+    #runner.run()
