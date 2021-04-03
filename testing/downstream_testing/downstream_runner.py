@@ -202,8 +202,8 @@ class DownstreamRunner:
             print(f"::group::{matrix}")
             for step in steps:
                 cmd = step["run"].split(" ")
-                print(cmd)
-                continue
+                #print(cmd)
+                #continue
                 subprocess.run(
                     cmd,
                     stdout=subprocess.PIPE,

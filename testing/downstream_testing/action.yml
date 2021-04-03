@@ -10,7 +10,7 @@ inputs:
     description: "The name(s) of the jobs to use from the YAML file."
     required: true
 
-  DS_EXCLUDE:
+  DS_MATRIX_EXCLUDE:
     description: "Matrix items to exclude from the jobs."
     required: false
     default: ""
@@ -21,4 +21,4 @@ runs:
   args:
     - ${{ inputs.DS_YAML }}
     - ${{ inputs.DS_JOBS }}
-    - ${{ inputs.DS_EXCLUDE }}
+    - ${{ inputs.DS_MATRIX_EXCLUDE }}
