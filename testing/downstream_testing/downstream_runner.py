@@ -38,10 +38,18 @@ def _matrix_expr(expr, matrix):
     """
     matrix_key = expr.split(".")[1]
     return matrix._asdict()[matrix_key.strip()]
+
+def _contains(expr, args):
+    """ Evaluate if `search` contains `item`
+    """
+    search = args[0]
+    item = args[1]
+    return item in search
     
 STEP_SUBPARSER_CMDS = {
     "steps.split-matrix-name.outputs._0": _split_matrix_name_outputs,
     "matrix": _matrix_expr,
+    "contains": _contains,
 }
 
 class ExpressionDispatch(UserDict):
@@ -159,6 +167,24 @@ class DownstreamRunner:
 
                 for step in self.steps[job]:
                     this_step = step.copy()
+                    if "if" in this_step:
+                        result = True
+                        for expr in re.finditer(r"(?P<func>^.+)\((?P<arg1>.+)\,\s*(?P<arg2>.+)\)", this_step["if"]):
+                            func_text = expr.group("func")
+                            arg1_text = expr.group("arg1")
+                            arg2_text = expr.group("arg2").strip("'")
+                            args = []
+                            for arg in (arg1_text, arg2_text):
+                                if arg in self.matrix_dispather:
+                                    arg = self.matrix_dispather.dispatch(arg, matrix)
+                                args.append(arg)
+                            if func_text in self.matrix_dispather:
+                                result = self.matrix_dispather.dispatch(func_text, args)
+                                if not result:
+                                    break
+                        if not result:
+                            continue
+                            
                     if "run" in this_step:
                         for expr in re.finditer(r"\${{\s*(?P<expr>.+)\s*}}", this_step["run"]):
                             expr_text = expr.group("expr")
@@ -176,6 +202,6 @@ if __name__ == "__main__":
         "matrix_exclude": cli_args.matrix_exclude,
     }
     runner = DownstreamRunner(**runner_args)
-    print(runner)
-    print()
+    #print(runner)
+    #print()
     pprint(runner.build_run())
