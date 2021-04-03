@@ -207,7 +207,7 @@ class DownstreamRunner:
                             if expr_text in self.expr_dispatcher:
                                 sub_text = self.expr_dispatcher.dispatch(expr_text, matrix)
                                 this_step["run"] = re.sub(r"\${{\s*.+\s*}}", sub_text, this_step["run"])
-                        this_step["run"] = this_step["run"].rstrip("\n").replace("\n", " && ")
+                        this_step["run"] = this_step["run"].rstrip("\n")
                         this_step["run"] = re.sub(r"sudo\s\-\w+\s|sudo\s", "", this_step["run"])
                     run[matrix.name].append(this_step)
         return run
@@ -218,14 +218,15 @@ class DownstreamRunner:
         for matrix, steps in run_steps.items():
             print(f"::group::{matrix}")
             for step in steps:
-                cmd = step_cmd_sub(step["run"]).split(" ")
-                print(f"--> running: {cmd}")
-                #continue
-                subprocess.run(
-                    cmd,
-                    encoding="utf-8",
-                    check=True
-                )
+                for cmd in step["run"].split("\n"):
+                    cmd = step_cmd_sub(cmd).split(" ")
+                    print(f"--> running: {cmd}")
+                    #continue
+                    subprocess.run(
+                        cmd,
+                        encoding="utf-8",
+                        check=True
+                    )
             print("::endgroup::")
 
 if __name__ == "__main__":
