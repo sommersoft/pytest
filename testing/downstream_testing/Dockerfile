@@ -1,4 +1,4 @@
-ARG ACTION_IMAGE=ubuntu:latest
+ARG ACTION_IMAGE=python:latest
 
 FROM $ACTION_IMAGE
 
