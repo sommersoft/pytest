@@ -199,7 +199,11 @@ class DownstreamRunner:
         for step in run_steps:
             cmd = step["run"].split()
             subprocess.run(
-                cmd
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                encoding="utf-8",
+                check=True
             )
 
 if __name__ == "__main__":
@@ -212,4 +216,5 @@ if __name__ == "__main__":
     runner = DownstreamRunner(**runner_args)
     #print(runner)
     #print()
-    pprint(runner.build_run())
+    #pprint(runner.build_run())
+    runner.run()
