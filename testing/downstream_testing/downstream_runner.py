@@ -178,7 +178,7 @@ class DownstreamRunner:
                     py_version = matrix.python if matrix.python is not None else matrix.python_version
                     run[matrix.name].append({
                         "name": "Set pyenv version",
-                        "run": f"pyenv global {match_pyenv(str(py_version))}"
+                        "run": f"pyenv local {match_pyenv(str(py_version))}"
                     })
 
                 for step in self.steps[job]:
