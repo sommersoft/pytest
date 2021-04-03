@@ -6,8 +6,8 @@ on:
       - downstream_testing
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  downstream-ubuntu:
+    runs-on: ubuntu:latest
     timeout-minutes: 30
 
     strategy:
@@ -15,17 +15,13 @@ jobs:
       matrix:
         include:
           - name: "pytest-html"
-            python: "3.9"
-            os: ubuntu-latest
             repo: "pytest-dev/pytest-html"
             jobs: "build_python"
             workflow_name: "actions.yml"
-          #- name: "pytest-django"
-          #  python: "3.9"
-          #  os: ubuntu-latest
-          #  repo: "pytest-dev/pytest-django"
-          #  jobs: "test"
-          #  workflow_name: "main.yml"
+          - name: "pytest-django"
+            repo: "pytest-dev/pytest-django"
+            jobs: "test"
+            workflow_name: "main.yml"
 
     steps:
     - uses: actions/checkout@v2

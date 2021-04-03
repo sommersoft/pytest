@@ -3,7 +3,7 @@ ARG ACTION_IMAGE=python:latest
 FROM $ACTION_IMAGE
 
 COPY entrypoint.sh /entrypoint.sh
-COPY pyenv-versions.txt ./
+ONBUILD COPY pyenv-versions.txt ./
 #COPY downstream_runner.py /downstream_runner.py
 
 RUN apt-get update
@@ -16,7 +16,7 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 RUN curl https://pyenv.run | bash
 
-RUN xargs -a pyenv-versions.txt -P 4 -n 1 pyenv install
+ONBUILD RUN xargs -a pyenv-versions.txt -P 4 -n 1 pyenv install
 
 RUN pip install --no-cache-dir pyyaml
 
