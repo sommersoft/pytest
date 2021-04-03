@@ -237,7 +237,7 @@ if __name__ == "__main__":
         "matrix_exclude": cli_args.matrix_exclude,
     }
     runner = DownstreamRunner(**runner_args)
-    print(runner)
+    #print(runner)
     #print()
     #pprint(runner.build_run())
-    #runner.run()
+    runner.run()
