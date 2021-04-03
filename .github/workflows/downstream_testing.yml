@@ -14,11 +14,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- name: "pytest-html"
-          #  repo: "pytest-dev/pytest-html"
-          #  jobs: "build_python"
-          #  workflow_name: "actions.yml"
-          #  matrix_exclude: ""
+          - name: "pytest-html"
+            repo: "pytest-dev/pytest-html"
+            jobs: "build_python"
+            workflow_name: "actions.yml"
+            matrix_exclude: ""
           - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
             jobs: "test"
