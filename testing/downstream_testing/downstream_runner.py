@@ -76,6 +76,15 @@ class ExpressionDispatch(UserDict):
                 return self.data[key](expr, matrix)
         return expr
 
+STEP_CMD_SUBSTIUTIONS = {
+    "systemctl start postgresql.service && postgres createuser --createdb $USER": "/etc/init.d/postgresql start && postgres createuser --createdb $USER",
+}
+
+def step_cmd_sub(cmd):
+    if cmd not in STEP_CMD_SUBSTIUTIONS:
+        return cmd
+    return STEP_CMD_SUBSTIUTIONS[cmd]
+
 matrix_nt = namedtuple(
     "matrix",
     ["name", "os", "python", "python_version", "allow_failure"],
@@ -112,7 +121,7 @@ class DownstreamRunner:
         self.job_names = kwargs.get("jobs")
         self._matrix = None
         self._steps = None
-        self.matrix_dispather = ExpressionDispatch()
+        self.expr_dispatcher = ExpressionDispatch()
 
     def __repr__(self):
         return f"DownstreamRunner(job_names={self.job_names}, matrix={self.matrix}, steps={self.steps}"
@@ -175,11 +184,11 @@ class DownstreamRunner:
                             arg2_text = expr.group("arg2").strip("'")
                             args = []
                             for arg in (arg1_text, arg2_text):
-                                if arg in self.matrix_dispather:
-                                    arg = self.matrix_dispather.dispatch(arg, matrix)
+                                if arg in self.expr_dispatcher:
+                                    arg = self.expr_dispatcher.dispatch(arg, matrix)
                                 args.append(arg)
-                            if func_text in self.matrix_dispather:
-                                result = self.matrix_dispather.dispatch(func_text, args)
+                            if func_text in self.expr_dispatcher:
+                                result = self.expr_dispatcher.dispatch(func_text, args)
                                 if not result:
                                     break
                         if not result:
@@ -188,8 +197,8 @@ class DownstreamRunner:
                     if "run" in this_step:
                         for expr in re.finditer(r"\${{\s*(?P<expr>.+)\s*}}", this_step["run"]):
                             expr_text = expr.group("expr")
-                            if expr_text in self.matrix_dispather:
-                                sub_text = self.matrix_dispather.dispatch(expr_text, matrix)
+                            if expr_text in self.expr_dispatcher:
+                                sub_text = self.expr_dispatcher.dispatch(expr_text, matrix)
                                 this_step["run"] = re.sub(r"\${{\s*.+\s*}}", sub_text, this_step["run"])
                         this_step["run"] = this_step["run"].rstrip("\n").replace("\n", " && ")
                         this_step["run"] = re.sub(r"sudo\s\-\w+\s|sudo\s", "", this_step["run"])
@@ -201,8 +210,8 @@ class DownstreamRunner:
         for matrix, steps in run_steps.items():
             print(f"::group::{matrix}")
             for step in steps:
-                cmd = step["run"].split(" ")
-                #print(cmd)
+                cmd = step_cmd_sub(step["run"]).split(" ")
+                print(f"running: {cmd}")
                 #continue
                 subprocess.run(
                     cmd,
