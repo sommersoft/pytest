@@ -211,12 +211,10 @@ class DownstreamRunner:
             print(f"::group::{matrix}")
             for step in steps:
                 cmd = step_cmd_sub(step["run"]).split(" ")
-                print(f"running: {cmd}")
+                print(f"--> running: {cmd}")
                 #continue
                 subprocess.run(
                     cmd,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
                     encoding="utf-8",
                     check=True
                 )
