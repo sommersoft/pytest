@@ -196,15 +196,18 @@ class DownstreamRunner:
 
     def run(self):
         run_steps = self.build_run()
-        for step in run_steps:
-            cmd = step["run"].split()
-            subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                encoding="utf-8",
-                check=True
-            )
+        for matrix, steps in run_steps.items():
+            print(f"::group::{matrix}")
+            for step in steps:
+                cmd = step["run"].split()
+                subprocess.run(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    encoding="utf-8",
+                    check=True
+                )
+            print("::endgroup::")
 
 if __name__ == "__main__":
     cli_args = parser.parse_args()
