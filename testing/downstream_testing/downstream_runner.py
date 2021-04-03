@@ -152,7 +152,6 @@ class DownstreamRunner:
                 run[matrix.name] = []
                 if any([matrix.python, matrix.python_version]):
                     py_version = matrix.python if matrix.python is not None else matrix.python_version
-                    print(f"py_version: {py_version}")
                     run[matrix.name].append({
                         "name": "Set pyenv version",
                         "run": f"pyenv global {match_pyenv(str(py_version))}"
