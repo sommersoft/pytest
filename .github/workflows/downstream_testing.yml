@@ -42,6 +42,7 @@ jobs:
     - name: Run Docker - Downstream Runner
       uses: ./testing/downstream_testing
       with:
+        DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}
         DS_MATRIX_EXCLUDE: ${{ matrix.matrix_exclude }}

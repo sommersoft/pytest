@@ -1,5 +1,6 @@
 import argparse
 from collections import namedtuple, UserDict
+import os
 from pprint import pprint
 import re
 import subprocess
@@ -8,6 +9,11 @@ import yaml
 
 parser = argparse.ArgumentParser(
     description="downstream Actions runner"
+)
+parser.add_argument(
+    "repo",
+    nargs=1,
+    help="Name of the repo."
 )
 parser.add_argument(
     "source",
@@ -117,6 +123,7 @@ class DownstreamRunner:
         if self.yaml_tree == None:
             raise SystemExit("Supplied YAML source failed to parse.")
 
+        self.repo = kwargs.get("repo")
         self.matrix_exclude = kwargs.get("matrix_exclude")
         self.job_names = kwargs.get("jobs")
         self._matrix = None
@@ -207,6 +214,7 @@ class DownstreamRunner:
 
     def run(self):
         run_steps = self.build_run()
+        os.chdir(self.repo)
         for matrix, steps in run_steps.items():
             print(f"::group::{matrix}")
             for step in steps:

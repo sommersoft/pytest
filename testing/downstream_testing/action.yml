@@ -2,6 +2,9 @@
 name: "Downstream Runner - Docker"
 description: "Docker container to run downstream tests for pytest."
 inputs:
+  DS_NAME:
+    description: "Name of the repo."
+    required: true
   DS_YAML:
     description: "Location of Actions workflow YAML file to use."
     required: true
@@ -19,6 +22,7 @@ runs:
   using: "docker"
   image: "Dockerfile"
   args:
+    - ${{ inputs.DS_NAME }}
     - ${{ inputs.DS_YAML }}
     - ${{ inputs.DS_JOBS }}
     - ${{ inputs.DS_MATRIX_EXCLUDE }}
