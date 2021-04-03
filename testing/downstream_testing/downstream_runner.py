@@ -194,6 +194,14 @@ class DownstreamRunner:
                     run[matrix.name].append(this_step)
         return run
 
+    def run(self):
+        run_steps = self.build_run()
+        for step in run_steps:
+            cmd = step["run"].split()
+            subprocess.run(
+                cmd
+            )
+
 if __name__ == "__main__":
     cli_args = parser.parse_args()
     runner_args = {
