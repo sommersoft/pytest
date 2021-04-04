@@ -12,9 +12,9 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 RUN apt-get -y install postgresql postgresql-client libpq-dev
-USER postgres
 RUN /etc/init.d/postgresql start
 RUN pg_isready
+USER postgres
 RUN psql --command "CREATE USER root" && createdb -O root
 USER root
 
