@@ -1,6 +1,6 @@
 ARG ACTION_IMAGE=python:latest
 
-FROM $ACTION_IMAGE
+FROM ${ACTION_IMAGE}
 
 COPY entrypoint.sh /entrypoint.sh
 COPY pyenv-versions.txt ./
