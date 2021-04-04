@@ -20,7 +20,6 @@ jobs:
             workflow_name: "actions.yml"
             matrix_exclude: ""
           - name: "pytest-django[postgres]"
-            docker_image: postgres:11.11
             repo: "pytest-dev/pytest-django"
             jobs: "test"
             workflow_name: "main.yml"
@@ -43,7 +42,6 @@ jobs:
     - name: Run Docker - Downstream Runner
       uses: ./testing/downstream_testing
       with:
-        ACTION_IMAGE: ${{ matrix.docker_image }}
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}

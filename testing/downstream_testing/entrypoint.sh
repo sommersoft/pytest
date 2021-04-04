@@ -2,7 +2,7 @@
 
 groups $USER
 groups postgres
-usermod -a -G postgres $USER
+usermod -a -G postgres root
 groups $USER
 
 python3.9 -m pip install --no-cache-dir pyyaml
