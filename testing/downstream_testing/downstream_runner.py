@@ -3,6 +3,7 @@ from collections import namedtuple, UserDict
 import os
 from pprint import pprint
 import re
+import shlex
 import subprocess
 
 import yaml
@@ -84,7 +85,7 @@ class ExpressionDispatch(UserDict):
 
 STEP_CMD_SUBSTIUTIONS = {
     "systemctl start postgresql.service": "/etc/init.d/postgresql start",
-    "postgres createuser --createdb $USER": "psql --command \"CREATE USER $USER WITH CREATEDB\";"
+    "postgres createuser --createdb $USER": shlex.quote("psql --command \"CREATE USER $USER WITH CREATEDB\";")
 }
 
 def step_cmd_sub(cmd):
@@ -221,7 +222,7 @@ class DownstreamRunner:
             print(f"::group::{matrix}")
             for step in steps:
                 for cmd in step["run"].split("\n"):
-                    cmd = step_cmd_sub(cmd).split(" ")
+                    cmd = shlex.split(step_cmd_sub(cmd))
                     print(f"--> running: {cmd}")
                     #continue
                     subprocess.run(
