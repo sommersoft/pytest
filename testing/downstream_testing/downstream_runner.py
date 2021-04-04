@@ -83,7 +83,7 @@ class ExpressionDispatch(UserDict):
         return expr
 
 STEP_CMD_SUBSTIUTIONS = {
-    "systemctl start postgresql.service && postgres createuser --createdb $USER": "/etc/init.d/postgresql start && postgres createuser --createdb $USER",
+    "systemctl start postgresql.service": "/etc/init.d/postgresql start",
 }
 
 def step_cmd_sub(cmd):
@@ -174,13 +174,13 @@ class DownstreamRunner:
         for job in self.job_names:
             for matrix in self.matrix[job]:
                 run[matrix.name] = []
-                if any([matrix.python, matrix.python_version]):
-                    py_version = matrix.python if matrix.python is not None else matrix.python_version
-                    run[matrix.name].append({
-                        "name": "Set pyenv version",
-                        #"run": f"pyenv local {match_pyenv(str(py_version))}\necho $PYTHONPATH"
-                        "run": "echo $PYTHONPATH"
-                    })
+                #if any([matrix.python, matrix.python_version]):
+                #    py_version = matrix.python if matrix.python is not None else matrix.python_version
+                #    run[matrix.name].append({
+                #        "name": "Set pyenv version",
+                #        #"run": f"pyenv local {match_pyenv(str(py_version))}\necho $PYTHONPATH"
+                #        "run": "echo $PYTHONPATH"
+                #    })
 
                 for step in self.steps[job]:
                     this_step = step.copy()
