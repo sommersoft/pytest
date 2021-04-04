@@ -13,6 +13,7 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
 
 RUN apt-get -y install postgresql postgresql-client libpq-dev
 USER postgres
+RUN /etc/init.d/postgresql start
 RUN psql --command "CREATE USER root WITH CREATEDB"
 USER root
 
