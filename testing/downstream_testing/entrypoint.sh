@@ -1,8 +1,9 @@
 #!/bin/bash
 
 groups $USER
-
 groups postgres
+usermod -a -G postgres $USER
+groups $USER
 
 python3.9 -m pip install --no-cache-dir pyyaml
 
