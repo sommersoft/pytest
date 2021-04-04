@@ -1,5 +1,9 @@
 #!/bin/bash
 
+groups
+
+groups postgres
+
 python3.9 -m pip install --no-cache-dir pyyaml
 
 /etc/init.d/postgresql start
