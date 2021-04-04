@@ -84,6 +84,7 @@ class ExpressionDispatch(UserDict):
 
 STEP_CMD_SUBSTIUTIONS = {
     "systemctl start postgresql.service": "/etc/init.d/postgresql start",
+    "postgres createuser --createdb $USER": "psql --command \"CREATE USER $USER\"; && createdb -O $USER"
 }
 
 def step_cmd_sub(cmd):
