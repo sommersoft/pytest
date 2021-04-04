@@ -26,7 +26,7 @@ runs:
   using: "docker"
   image: "Dockerfile"
   env:
-    ACTION_IMAGE: ${{ inputs.ACTION_IMAGE }}
+    DS_ACTION_IMAGE: ${{ inputs.ACTION_IMAGE }}
   args:
     - ${{ inputs.DS_NAME }}
     - ${{ inputs.DS_YAML }}
