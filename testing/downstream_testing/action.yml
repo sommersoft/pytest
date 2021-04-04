@@ -2,6 +2,10 @@
 name: "Downstream Runner - Docker"
 description: "Docker container to run downstream tests for pytest."
 inputs:
+  ACTION_IMAGE:
+    description: "Docker image to use."
+    require: false
+    default: "python:latest"
   DS_NAME:
     description: "Name of the repo."
     required: true
@@ -22,6 +26,7 @@ runs:
   using: "docker"
   image: "Dockerfile"
   args:
+    - ${{ inputs.ACTION_IMAGE }}
     - ${{ inputs.DS_NAME }}
     - ${{ inputs.DS_YAML }}
     - ${{ inputs.DS_JOBS }}

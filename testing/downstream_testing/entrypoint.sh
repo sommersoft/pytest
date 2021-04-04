@@ -1,6 +1,6 @@
 #!/bin/bash
 
-groups
+groups $USER
 
 groups postgres
 

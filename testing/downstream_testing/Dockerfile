@@ -18,6 +18,7 @@ RUN apt-get -y install postgresql postgresql-client libpq-dev
 
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+ENV POSTGRES_USER root
 
 RUN curl https://pyenv.run | bash
 
