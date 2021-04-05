@@ -1,4 +1,4 @@
-FROM debian:9
+FROM python:latest
 
 COPY entrypoint.sh /entrypoint.sh
 COPY pyenv-versions.txt ./
