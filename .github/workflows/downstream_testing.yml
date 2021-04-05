@@ -39,6 +39,8 @@ jobs:
         fetch-depth: 0
         repository: ${{ matrix.repo }}
         path: ${{ matrix.name }}
+    - name: echo user
+      run: echo $USER
     - name: Run Docker - Downstream Runner
       uses: ./testing/downstream_testing
       with:
