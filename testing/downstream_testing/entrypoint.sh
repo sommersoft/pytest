@@ -5,7 +5,7 @@ usermod -a -G postgres root
 
 python3.9 -m pip install --no-cache-dir pyyaml
 
-#/etc/init.d/postgresql start
+/etc/init.d/postgresql start
 pg_isready
 pg_config
 psql --command "CREATE USER $USER WITH CREATEDB CREATEROLE"
