@@ -14,11 +14,11 @@ ENV LC=en_US.UTF-8
 RUN apt-get -y install postgresql postgresql-client libpq-dev
 RUN /etc/init.d/postgresql start
 EXPOSE 5432
-USER postgres
-RUN psql -U postgres --command "CREATE USER root WITH CREATEDB CREATEROLE"
+#USER postgres
+#RUN psql -U postgres --command "CREATE USER root WITH CREATEDB CREATEROLE"
 VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 #RUN pg_config
-USER root
+#USER root
 
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
