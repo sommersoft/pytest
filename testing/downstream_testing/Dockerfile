@@ -1,4 +1,4 @@
-FROM python:latest
+FROM debian:9
 
 COPY entrypoint.sh /entrypoint.sh
 COPY pyenv-versions.txt ./
@@ -13,9 +13,9 @@ RUN apt-get -y install postgresql postgresql-client libpq-dev
 USER postgres
 RUN /etc/init.d/postgresql start
 EXPOSE 5432
-RUN psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
+#RUN psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
 VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
-RUN pg_config
+#RUN pg_config
 USER root
 
 ENV PYENV_ROOT /root/.pyenv
