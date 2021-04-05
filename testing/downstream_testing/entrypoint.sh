@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#usermod -a -G postgres root
+usermod -a -G postgres, ssl-cert root
 
 
 python3.9 -m pip install --no-cache-dir pyyaml

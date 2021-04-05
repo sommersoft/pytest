@@ -9,16 +9,16 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
+ENV LC=en_US.UTF-8
+
 RUN apt-get -y install postgresql postgresql-client libpq-dev
 RUN /etc/init.d/postgresql start
 EXPOSE 5432
 USER postgres
-#RUN psql -U postgres --command "CREATE USER root WITH CREATEDB CREATEROLE"
+RUN psql -U postgres --command "CREATE USER root WITH CREATEDB CREATEROLE"
 VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 #RUN pg_config
 USER root
-
-RUN ls -l /etc/postgresql/11/main
 
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
