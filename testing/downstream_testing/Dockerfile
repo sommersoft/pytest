@@ -19,7 +19,7 @@ USER postgres
 RUN echo "host all all  0.0.0.0/0 md5" >> /var/lib/postgresql/11/main/pg_hba.conf
 RUN echo "listen_addresses='*'\nunix_socket_directories = '/var/run/postgresql'" >> /var/lib/postgresql/11/main/postgresql.conf
 RUN cat /var/lib/postgresql/11/main/postgresql.conf
-#RUN ls -l /var/lib/postgresql/11/main
+RUN ls -l /usr/lib/postgresql/11/bin
 #RUN /etc/init.d/postgresql start
 #RUN /usr/lib/postgresql/11/bin/pg_ctl start
 EXPOSE 5432
