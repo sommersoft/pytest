@@ -11,10 +11,11 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
 
 RUN apt-get -y install postgresql postgresql-client libpq-dev
 USER postgres
-RUN pg_ctl start
-EXPOSE 5432
-RUN pg_isready
+RUN /etc/init.d/postgresql start
 RUN psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
+EXPOSE 5432
+VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+RUN pg_config
 USER root
 
 ENV PYENV_ROOT /root/.pyenv
