@@ -26,6 +26,7 @@ EXPOSE 5432
 RUN /etc/init.d/postgresql start && \
     psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
 VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+CMD [ postgrep ]
 USER root
 
 ENV PYENV_ROOT /root/.pyenv
