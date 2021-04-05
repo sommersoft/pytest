@@ -16,7 +16,7 @@ RUN ln -s /var/run/postgresql/.s.PGSQL.5432 /tmp/.s.PGSQL.5432
 RUN /etc/init.d/postgresql start
 EXPOSE 5432
 USER postgres
-RUN psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
+RUN psql -h localhost --command "CREATE USER root WITH CREATEDB CREATEROLE"
 VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 #RUN pg_config
 USER root
