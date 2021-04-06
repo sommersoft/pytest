@@ -48,23 +48,26 @@ RUN set -eux; \
 	gosu --version; \
 	gosu nobody true
 
-#ENV PGDATA=/var/lib/postgresql/11/main
+RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
+RUN mkdir /docker-entrypoint-initdb.d
+ENV PATH $PATH:/usr/lib/postgresql/11/bin
 ENV PGDATA /var/lib/postgresql/data
 # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
 VOLUME /var/lib/postgresql/data
 ENV POSTGRES_USER=root
+ENV POSTGRES_HOST_AUTH_METHOD=trust
 USER postgres
 #RUN echo "host all all  0.0.0.0/0 md5" >> /var/lib/postgresql/11/main/pg_hba.conf
 #RUN echo "listen_addresses='*'\nunix_socket_directories = '/var/run/postgresql'" >> /var/lib/postgresql/11/main/postgresql.conf
 #RUN cat /var/lib/postgresql/11/main/postgresql.conf
 #RUN ls -l /usr/lib/postgresql/11/bin
-EXPOSE 5432
 #RUN /etc/init.d/postgresql start && \
 #    psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
 #VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
-CMD ["postgres"]
+
 USER root
+EXPOSE 5432
 
 #### MySQL ####
 
@@ -73,7 +76,9 @@ USER root
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 RUN curl https://pyenv.run | bash
-RUN xargs -a pyenv-versions.txt -P 4 -n 1 pyenv install \
-    && xargs -a pyenv-versions.txt pyenv global
+#RUN xargs -a pyenv-versions.txt -P 4 -n 1 pyenv install \
+#    && xargs -a pyenv-versions.txt pyenv global
 
 ENTRYPOINT [ "/entrypoint.sh" ]
+
+#CMD ["postgres"]
