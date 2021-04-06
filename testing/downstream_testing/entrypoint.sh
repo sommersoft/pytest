@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo $PG_VERSION
+
 python3.9 -m pip install --no-cache-dir pyyaml
 
 /postgres_entrypoint.sh postgres >logfile 2>&1 &
