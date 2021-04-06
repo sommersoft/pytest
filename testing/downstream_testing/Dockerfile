@@ -76,8 +76,8 @@ EXPOSE 5432
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 RUN curl https://pyenv.run | bash
-#RUN xargs -a pyenv-versions.txt -P 4 -n 1 pyenv install \
-#    && xargs -a pyenv-versions.txt pyenv global
+RUN xargs -a pyenv-versions.txt -P 4 -n 1 pyenv install \
+    && xargs -a pyenv-versions.txt pyenv global
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
