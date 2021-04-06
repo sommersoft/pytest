@@ -60,8 +60,8 @@ USER postgres
 #RUN cat /var/lib/postgresql/11/main/postgresql.conf
 #RUN ls -l /usr/lib/postgresql/11/bin
 EXPOSE 5432
-RUN /etc/init.d/postgresql start && \
-    psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
+#RUN /etc/init.d/postgresql start && \
+#    psql --command "CREATE USER root WITH CREATEDB CREATEROLE"
 #VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 CMD ["postgres"]
 USER root
