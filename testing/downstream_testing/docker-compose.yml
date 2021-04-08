@@ -2,8 +2,19 @@ version: "3"
 services:
   downstream_runner:
     build: .
+    volumes:
+      - type: volume
+        source: "/home/runner/work/pytest/pytest"
+        target: "/pytest"
+        volume:
+          nocopy: true
+    depends_on:
+      - db
+
 
   db:
     image: "postgres:latest"
+    expose:
+      - "5342"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust

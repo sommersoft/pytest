@@ -19,7 +19,7 @@ jobs:
             jobs: "build_python"
             workflow_name: "actions.yml"
             matrix_exclude: ""
-          - name: "pytest-django[postgres]"
+          - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
             jobs: "test"
             workflow_name: "main.yml"

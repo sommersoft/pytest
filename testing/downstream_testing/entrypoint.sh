@@ -2,6 +2,8 @@
 
 python3.9 -m pip install --no-cache-dir pyyaml
 
+cd /pytest
+
 echo "pwd: $(pwd)"
 
 echo "downstream_runner: $(find -path **/downstream_runner*)"
