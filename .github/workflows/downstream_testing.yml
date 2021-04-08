@@ -42,11 +42,11 @@ jobs:
     - name: echo user
       run: echo $USER
     - name: Docker Compose - Downstream Runner
-      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml up
+      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml --exit-code-from up
       env:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}
         DS_MATRIX_EXCLUDE: ${{ matrix.matrix_exclude }}
-    - name: Run Docker - Downstream Runner
-      run: docker run --network container:downstream_runner appropriate/curl -s --retry 10 --retry-connrefused
+    #- name: Run Docker - Downstream Runner
+    #  run: docker run --network container:downstream_runner appropriate/curl -s --retry 10 --retry-connrefused
