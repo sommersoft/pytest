@@ -49,4 +49,4 @@ jobs:
         DS_JOBS: ${{ matrix.jobs }}
         DS_MATRIX_EXCLUDE: ${{ matrix.matrix_exclude }}
     - name: Run Docker - Downstream Runner
-      run: docker run --network container:downstream_runner
+      run: docker run --network container:downstream_runner appropriate/curl -s --retry 10 --retry-connrefused
