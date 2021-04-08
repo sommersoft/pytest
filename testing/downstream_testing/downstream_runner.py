@@ -84,7 +84,7 @@ class ExpressionDispatch(UserDict):
         return expr
 
 STEP_CMD_SUBSTIUTIONS = {
-    "systemctl start postgresql.service": "gosu postgres pg_isready -t 240",
+    "systemctl start postgresql.service": "pg_isready -t 240",
     #"postgres createuser --createdb $USER": "pg_config"
 }
 
