@@ -19,4 +19,4 @@ RUN curl https://pyenv.run | bash
 RUN xargs -a pyenv-versions.txt -P 3 -n 1 pyenv install \
     && xargs -a pyenv-versions.txt pyenv global
 
-#ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
