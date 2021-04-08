@@ -1,9 +1,9 @@
-name: downstream_testing
+name: downstream_compose
 
 on:
   push:
     branches:
-      - downstream_testing
+      - downstream_compose
 
 jobs:
   downstream-ubuntu:
@@ -41,10 +41,12 @@ jobs:
         path: ${{ matrix.name }}
     - name: echo user
       run: echo $USER
-    - name: Run Docker - Downstream Runner
-      uses: ./testing/downstream_testing
+    - name: Docker Compose - Downstream Runner
+      uses: docker-compose up -f ./testing/downstream_testing
       with:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}
         DS_MATRIX_EXCLUDE: ${{ matrix.matrix_exclude }}
+    - name: Run Docker - Downstream Runner
+      run: docker run --network container:downstream_runner
