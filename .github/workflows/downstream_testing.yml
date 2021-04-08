@@ -42,7 +42,7 @@ jobs:
     - name: echo user
       run: echo $USER
     - name: Docker Compose - Downstream Runner
-      uses: docker-compose up -f ./testing/downstream_testing
+      run: docker-compose up -f ./testing/downstream_testing
       with:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
