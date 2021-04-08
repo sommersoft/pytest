@@ -8,6 +8,8 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
+RUN apt-get install -y postgresql-client
+
 ENV LC=en_US.UTF-8
 
 #### pyenv ####
@@ -17,4 +19,4 @@ RUN curl https://pyenv.run | bash
 RUN xargs -a pyenv-versions.txt -P 3 -n 1 pyenv install \
     && xargs -a pyenv-versions.txt pyenv global
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+#ENTRYPOINT [ "/entrypoint.sh" ]
