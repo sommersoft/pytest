@@ -43,7 +43,7 @@ jobs:
       run: echo $USER
     - name: Docker Compose - Downstream Runner
       run: docker-compose up -f ./testing/downstream_testing
-      with:
+      env:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
         DS_JOBS: ${{ matrix.jobs }}
