@@ -2,6 +2,11 @@ version: "3"
 services:
   downstream_runner:
     build: .
+    environment:
+      - DS_NAME
+      - DS_YAML
+      - DS_JOBS
+      - DS_MATRIX_EXCLUDE
     volumes:
       - type: bind
         source: /home/runner/work/pytest/pytest
