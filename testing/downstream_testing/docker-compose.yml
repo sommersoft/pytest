@@ -4,8 +4,8 @@ services:
     build: .
     volumes:
       - type: bind
-        source: "/home/runner/work/pytest/pytest"
-        target: "/pytest"
+        source: /home/runner/work/pytest/pytest
+        target: /pytest
         volume:
           nocopy: true
     depends_on:
@@ -16,5 +16,3 @@ services:
       - "5342"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
-
-volumes:
