@@ -85,7 +85,7 @@ class ExpressionDispatch(UserDict):
 
 STEP_CMD_SUBSTIUTIONS = {
     "systemctl start postgresql.service": "echo ignoring: systemctl start postgresql.service",
-    "postgres createuser --createdb $USER": "pg_isready -U runner -H /var/run/postgresql/.s.PGSQL.5432"
+    "postgres createuser --createdb $USER": "pg_isready -U runner -h /var/run/postgresql/.s.PGSQL.5432"
 }
 
 def step_cmd_sub(cmd):
