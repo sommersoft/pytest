@@ -21,3 +21,4 @@ services:
       - "5342"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=${USER}
