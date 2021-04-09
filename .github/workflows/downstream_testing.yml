@@ -16,13 +16,13 @@ jobs:
         include:
           - name: "pytest-html"
             repo: "pytest-dev/pytest-html"
-            docker_profile: "--profile nodb"
+            docker_profile: "nodb"
             jobs: "build_python"
             workflow_name: "actions.yml"
             matrix_exclude: ""
           - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
-            docker_profile: "--profile postgres"
+            docker_profile: "postgres"
             jobs: "test"
             workflow_name: "main.yml"
             matrix_exclude: |
@@ -32,7 +32,7 @@ jobs:
               py35-dj22-sqlite_file-coverage py36-dj31-mysql_myisam-coverage py36-dj32-mysql_myisam-coverage
           - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
-            docker_profile: "--profile mysql"
+            docker_profile: "mysql"
             jobs: "test"
             workflow_name: "main.yml"
             matrix_exclude: |
@@ -52,7 +52,7 @@ jobs:
         repository: ${{ matrix.repo }}
         path: ${{ matrix.name }}
     - name: Run Downstream Tests
-      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml ${{ matrix.docker_profile }} up --exit-code-from base_${{ matrix.docker_profile }}
+      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml --profile ${{ matrix.docker_profile }} up --exit-code-from base_${{ matrix.docker_profile }}
       env:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
