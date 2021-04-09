@@ -19,7 +19,6 @@ jobs:
             jobs: "build_python"
             workflow_name: "actions.yml"
             matrix_exclude: ""
-            docker_profiles: ""
           - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
             jobs: "test"
@@ -29,7 +28,6 @@ jobs:
               py37-dj22-sqlite-xdist-coverage py38-dj30-sqlite-xdist-coverage 
               py38-dj31-sqlite-xdist-coverage py38-dj32-sqlite-xdist-coverage py39-djmain-sqlite-coverage
               py35-dj22-sqlite_file-coverage py36-dj31-mysql_myisam-coverage py36-dj32-mysql_myisam-coverage
-            docker_profiles: "--profile postgres"
 
     steps:
     - uses: actions/checkout@v2
@@ -44,7 +42,7 @@ jobs:
     - name: echo user
       run: echo $USER
     - name: Docker Compose - Downstream Runner
-      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml ${{ matrix.docker_profiles }} up --exit-code-from downstream_runner
+      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml up --exit-code-from downstream_runner
       env:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}

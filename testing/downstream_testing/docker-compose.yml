@@ -24,5 +24,3 @@ services:
     volumes:
       - /etc/passwd:/etc/passwd:ro
       - ./data/db:/var/lib/postgresql/data
-    profiles:
-      - postgres
