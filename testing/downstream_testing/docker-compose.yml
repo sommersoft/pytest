@@ -14,11 +14,11 @@ services:
         volume:
           nocopy: true
     depends_on:
-      - db
-  db:
+      - TEST_DB_HOST
+  TEST_DB_HOST:
     image: "postgres:latest"
-    expose:
-      - "5342"
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=${USER}
