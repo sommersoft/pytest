@@ -52,7 +52,7 @@ jobs:
         repository: ${{ matrix.repo }}
         path: ${{ matrix.name }}
     - name: Run Downstream Tests
-      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml ${{ matrix.docker_profile }} up --exit-code-from downstream_runner
+      run: docker-compose -f ./testing/downstream_testing/docker-compose.yml ${{ matrix.docker_profile }} up --exit-code-from base_${{ matrix.docker_profile }}
       env:
         DS_NAME: ${{ matrix.name }}
         DS_YAML: ./${{ matrix.name }}/.github/workflows/${{ matrix.workflow_name }}
