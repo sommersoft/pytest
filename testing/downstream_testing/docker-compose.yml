@@ -56,6 +56,7 @@ services:
       - DS_MATRIX_EXCLUDE
       - TEST_DB_USER=root
       - TEST_DB_PASSWORD=root
+      - TEST_DB_HOST=mysql_db
     volumes:
       - type: bind
         source: /home/runner/work/pytest/pytest
@@ -71,6 +72,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
     volumes:
       - ./data/db:/var/lib/mysql
     profiles:
