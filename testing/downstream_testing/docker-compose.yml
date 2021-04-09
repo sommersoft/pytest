@@ -9,7 +9,6 @@ services:
       - DS_MATRIX_EXCLUDE
       - TEST_DB_USER=$USER
       - TEST_DB_PASSWORD="pytest_djang0"
-      - TEST_DB_HOST="db"
     volumes:
       - type: bind
         source: /home/runner/work/pytest/pytest
