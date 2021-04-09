@@ -22,3 +22,5 @@ services:
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=${USER}
+    volumes:
+      - /etc/passwd:/etc/passwd:ro
