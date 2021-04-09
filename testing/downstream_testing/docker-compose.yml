@@ -7,6 +7,9 @@ services:
       - DS_YAML
       - DS_JOBS
       - DS_MATRIX_EXCLUDE
+      - TEST_DB_USER=$USER
+      - TEST_DB_PASSWORD="pytest_djang0"
+      - TEST_DB_HOST="db"
     volumes:
       - type: bind
         source: /home/runner/work/pytest/pytest
@@ -14,13 +17,15 @@ services:
         volume:
           nocopy: true
     depends_on:
-      - TEST_DB_HOST
-  TEST_DB_HOST:
+      - db
+
+  db:
     image: "postgres:latest"
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      #- POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD="pytest_djang0"
       - POSTGRES_USER=$USER
       - POSTGRES_DB=pytest_django_should_never_get_accessed
     volumes:
       - /etc/passwd:/etc/passwd:ro
-      - ./data/db:/var/lib/postgresql/data
+      - data/db:/var/lib/postgresql/data
