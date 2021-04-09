@@ -8,7 +8,7 @@ services:
       - DS_JOBS
       - DS_MATRIX_EXCLUDE
       - TEST_DB_USER=$USER
-      - TEST_DB_PASSWORD="pytest_djang0"
+      - TEST_DB_PASSWORD=pytest_djang0
     volumes:
       - type: bind
         source: /home/runner/work/pytest/pytest
@@ -22,7 +22,7 @@ services:
     image: "postgres:latest"
     environment:
       #- POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_PASSWORD="pytest_djang0"
+      - POSTGRES_PASSWORD=pytest_djang0
       - POSTGRES_USER=$USER
       - POSTGRES_DB=pytest_django_should_never_get_accessed
     volumes:
