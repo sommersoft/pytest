@@ -17,10 +17,10 @@ services:
       - TEST_DB_HOST
   TEST_DB_HOST:
     image: "postgres:latest"
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=${USER}
+      - POSTGRES_DB=pytest_django_should_never_get_accessed
     volumes:
       - /etc/passwd:/etc/passwd:ro
+      - ./data/db:/var/lib/postgresql/data
