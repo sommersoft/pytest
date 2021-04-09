@@ -85,8 +85,8 @@ class ExpressionDispatch(UserDict):
 
 STEP_CMD_SUBSTIUTIONS = {
     "systemctl start postgresql.service": "echo ignoring: systemctl start postgresql.service",
-    "postgres createuser --createdb $USER": "echo ignoring: postgres createuser --createdb $USER"
-    "bash <(curl -s https://codecov.io/bash) -Z -X gcov -X xcode -X gcovout": "echo ignoring: bash <(curl -s https://codecov.io/bash) -Z -X gcov -X xcode -X gcovout"
+    "postgres createuser --createdb $USER": "echo ignoring: postgres createuser --createdb $USER",
+    "bash <(curl -s https://codecov.io/bash) -Z -X gcov -X xcode -X gcovout": "echo ignoring: bash <(curl -s https://codecov.io/bash) -Z -X gcov -X xcode -X gcovout",
 }
 
 def step_cmd_sub(cmd):
