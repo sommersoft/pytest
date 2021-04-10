@@ -1,13 +1,7 @@
-#FROM python:latest
-FROM ubuntu:latest
+FROM python:latest
 
 COPY entrypoint.sh /entrypoint.sh
 COPY pyenv-versions.txt ./
-
-# needed for Ubuntu to not stall on interactive tzdata setup
-RUN echo 'Etc/UTC' > /etc/timezone && \
-    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
-    apt-get update && apt-get install -q -y tzdata && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update
 RUN apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
