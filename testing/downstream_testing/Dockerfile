@@ -8,7 +8,7 @@ RUN apt-get install --no-install-recommends -y make build-essential libssl-dev z
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
-RUN apt-get install -y postgresql-client
+RUN apt-get install -y postgresql-client mysql-client
 
 ENV LC=en_US.UTF-8
 
