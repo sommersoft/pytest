@@ -3,6 +3,10 @@ FROM python:latest
 COPY entrypoint.sh /entrypoint.sh
 COPY pyenv-versions.txt ./
 
+# Add mysql apt repository
+RUN apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5
+RUN echo 'deb http://repo.mysql.com/apt/debian/ buster mysql-8.0' > /etc/apt/sources.list.d/mysql.list
+
 RUN apt-get update
 RUN apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
