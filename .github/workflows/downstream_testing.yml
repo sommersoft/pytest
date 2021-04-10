@@ -20,6 +20,7 @@ jobs:
             jobs: "build_python"
             workflow_name: "actions.yml"
             matrix_exclude: ""
+          
           - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
             docker_profile: "postgres"
@@ -40,6 +41,15 @@ jobs:
               py37-dj22-sqlite-xdist-coverage py38-dj30-sqlite-xdist-coverage pypy3-dj22-postgres
               py38-dj31-sqlite-xdist-coverage py38-dj32-sqlite-xdist-coverage py39-djmain-sqlite-coverage
               py35-dj22-sqlite_file-coverage py39-dj31-postgres-xdist-coverage py39-dj32-postgres-xdist-coverage
+          - name: "pytest-django"
+            repo: "pytest-dev/pytest-django"
+            docker_profile: "nodb"
+            jobs: "test"
+            workflow_name: "main.yml"
+            matrix_exclude: |
+              checkqa,docs py35-dj22-postgres-pytest54-coverage pypy3-dj22-postgres
+              py39-dj31-postgres-xdist-coverage py39-dj32-postgres-xdist-coverage py37-dj30-mysql_innodb-coverage
+              py36-dj31-mysql_myisam-coverage py36-dj32-mysql_myisam-coverage
 
     steps:
     - uses: actions/checkout@v2
