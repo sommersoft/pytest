@@ -1,4 +1,5 @@
-FROM python:latest
+#FROM python:latest
+FROM ubuntu:latest
 
 COPY entrypoint.sh /entrypoint.sh
 COPY pyenv-versions.txt ./
