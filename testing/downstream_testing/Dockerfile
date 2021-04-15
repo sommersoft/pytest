@@ -15,8 +15,8 @@ RUN set -ex; \
 	apt-key list > /dev/null
 RUN echo 'deb http://repo.mysql.com/apt/debian/ buster mysql-8.0' > /etc/apt/sources.list.d/mysql.list
 
-RUN apt-get update
-RUN apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
+RUN apt-get update \
+	&& apt-get install --no-install-recommends -y make build-essential libssl-dev zlib1g-dev \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
