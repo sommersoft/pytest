@@ -2,9 +2,11 @@
 
 python3.9 -m pip install --no-cache-dir pyyaml
 
+eval $(pyenv init -)
+
 for VER in $(cat pyenv-versions.txt); 
 do 
-    pyenv shell $VER && pip install ../.; 
+    pyenv shell $VER && pyenv exec pip install ../.; 
 done
 
 cd /pytest
