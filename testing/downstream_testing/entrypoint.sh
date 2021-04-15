@@ -1,8 +1,8 @@
 #!/bin/bash
 
-python3.9 -m pip install --no-cache-dir pyyaml
-
 eval "$(pyenv init -)"
+
+python3.9 -m pip install --no-cache-dir pyyaml
 
 for VER in $(cat pyenv-versions.txt); 
 do 
