@@ -3,7 +3,7 @@
 eval "$(pyenv init -)"
 for VER in $(cat pyenv-versions.txt); 
 do 
-    pyenv shell $VER && pyenv exec pip install ./pytest; 
+    pyenv shell $VER && pyenv exec pip -q install ./pytest; 
 done
 pyenv shell --unset
 
