@@ -152,7 +152,7 @@ class DownstreamRunner:
             found_pytest = False
             updated_deps = []
             for dep in testenv_deps.split("\n"):
-                if re.search(r"pytest[ =<>~]", dep):
+                if re.search(r"^pytest[ =<>~]", dep):
                     found_pytest = True
                     updated_deps.insert(0, pytest_dep)
                 else:
