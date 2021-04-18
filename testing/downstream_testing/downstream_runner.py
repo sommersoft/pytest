@@ -1,5 +1,6 @@
 import argparse
 from collections import namedtuple, UserDict
+import configparser
 import os
 from pprint import pprint
 import re
@@ -107,7 +108,7 @@ def match_pyenv(version):
     """ Match the pyenv installed full Python version to `version`
     """
     pyenv_versions = subprocess.run(
-        ("pyenv", "versions"),
+        ("pyenv", "versions", "--bare"),
         capture_output=True,
         encoding="utf-8",
         errors="ignore",
@@ -115,8 +116,8 @@ def match_pyenv(version):
     )
 
     for pyenv_version in pyenv_versions.stdout.split("\n"):
-        pyenv_version = pyenv_version.lstrip(" *")
-        pyenv_version = re.sub(r"\s\(.+\)$", "", pyenv_version)
+        #pyenv_version = pyenv_version.lstrip(" *")
+        #pyenv_version = re.sub(r"\s\(.+\)$", "", pyenv_version)
         if pyenv_version.startswith(version):
             return pyenv_version
 
@@ -136,6 +137,27 @@ class DownstreamRunner:
         self._steps = None
         self.expr_dispatcher = ExpressionDispatch()
 
+    def inject_pytest_dep(self):
+        """ Ensure pytest is a dependency in tox.ini to allow us to use the 'local'
+            version of pytest.
+        """
+        ini_path = self.repo + "/tox.ini"
+        tox_source = configparser.ConfigParser()
+        tox_source.read_file(open(ini_path))
+        testenv_deps = tox_source.get("testenv", "deps", fallback=None)
+        if testenv_deps is None:
+            tox_source["testenv"]["deps"] = "pytest"
+        else:
+            found_pytest = False
+            for dep in testenv_deps.split("\n"):
+                if re.search(r"pytest[ =<>~]", dep):
+                    found_pytest = True
+            if not found_pytest:
+                tox_source["testenv"]["deps"] = "pytest"
+
+        with open(ini_path, "w") as f:
+            tox_source.write(f)
+
     def __repr__(self):
         return f"DownstreamRunner(repo={self.repo}, job_names={self.job_names}, matrix={self.matrix}, steps={self.steps})"
 
@@ -144,9 +166,13 @@ class DownstreamRunner:
         if self._matrix is None:
             matrix_items = {}
             for job in self.job_names:
+                job_yaml = self.yaml_tree["jobs"][job]
+                if "strategy" not in job_yaml:
+                    continue
+                
                 if job not in matrix_items:
                     matrix_items[job] = []
-                matrix_items["runs-on"] = self.yaml_tree["jobs"][job].get("runs-on")
+                #matrix_items["runs-on"] = self.yaml_tree["jobs"][job].get("runs-on")
                 for item in self.yaml_tree["jobs"][job]["strategy"]["matrix"]["include"]:
                     if not item.get("os", "ubuntu").startswith("ubuntu"):
                         continue
@@ -160,6 +186,7 @@ class DownstreamRunner:
                             )
                         )
             self._matrix = matrix_items
+        
         return self._matrix
 
     @property
@@ -220,6 +247,7 @@ class DownstreamRunner:
         return run
 
     def run(self):
+        self.inject_pytest_dep()
         run_steps = self.build_run()
         os.chdir(self.repo)
         for matrix, steps in run_steps.items():
