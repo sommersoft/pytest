@@ -150,11 +150,17 @@ class DownstreamRunner:
             tox_source["testenv"]["deps"] = pytest_dep
         else:
             found_pytest = False
+            updated_deps = []
             for dep in testenv_deps.split("\n"):
                 if re.search(r"pytest[ =<>~]", dep):
                     found_pytest = True
+                    updated_deps.insert(0, pytest_dep)
+                else:
+                    updated_deps.append(dep)
             if not found_pytest:
-                tox_source["testenv"]["deps"] = pytest_dep
+                updated_deps.insert(0, pytest_dep)
+                
+            tox_source["testenv"]["deps"] = "\n".join(updated_deps)
 
         with open(ini_path, "w") as f:
             tox_source.write(f)
