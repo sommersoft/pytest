@@ -9,4 +9,5 @@ pyenv shell --unset
 
 python3.9 -m pip install --no-cache-dir pyyaml
 cd /pytest
+python3.9 -c "import pytest; print(pytest.__version__)"
 python3.9 -u -m testing.downstream_testing.downstream_runner $DS_NAME $DS_YAML $DS_JOBS --matrix-exclude $DS_MATRIX_EXCLUDE
