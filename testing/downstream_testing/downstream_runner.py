@@ -142,18 +142,19 @@ class DownstreamRunner:
             version of pytest.
         """
         ini_path = self.repo + "/tox.ini"
+        pytest_dep = f"pytest @ file://{os.getcwd()}"
         tox_source = configparser.ConfigParser()
         tox_source.read_file(open(ini_path))
         testenv_deps = tox_source.get("testenv", "deps", fallback=None)
         if testenv_deps is None:
-            tox_source["testenv"]["deps"] = "pytest"
+            tox_source["testenv"]["deps"] = pytest_dep
         else:
             found_pytest = False
             for dep in testenv_deps.split("\n"):
                 if re.search(r"pytest[ =<>~]", dep):
                     found_pytest = True
             if not found_pytest:
-                tox_source["testenv"]["deps"] = "pytest"
+                tox_source["testenv"]["deps"] = pytest_dep
 
         with open(ini_path, "w") as f:
             tox_source.write(f)
