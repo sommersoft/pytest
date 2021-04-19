@@ -155,7 +155,7 @@ class DownstreamRunner:
                 if dep.startswith("pytest") and not dep.startswith("pytest-"):
                     has_gen = re.search(r"pytest\w*:", dep)
                     if has_gen is not None:
-                    found_pytest = True
+                        found_pytest = True
                         updated_deps.insert(0, f"!{has_gen.group()} {pytest_dep}")
                     updated_deps.append(dep)
                 else:
