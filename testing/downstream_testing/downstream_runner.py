@@ -143,6 +143,18 @@ class DownstreamRunner:
         """
         ini_path = self.repo + "/tox.ini"
         pytest_dep = f"pytest @ file://{os.getcwd()}"
+        DEPS = {
+            "pytest": {
+                "src": f"pytest @ file://{os.getcwd()}",
+                "condition": lambda x: x.startswith("pytest") and not x.startswith("pytest-"),
+                "has_gen": lambda x: re.search(r"pytest\w*:", x)
+            },
+            "pytest-rerunfailures": {
+                "src": "pytest-rerunfailures @ git+https://github.com/pytest-dev/pytest-rerunfailures.git",
+                "condition": lambda x: x.startswith("pytest-rerunfailures"),
+                "has_gen": lambda x: None
+            }
+        }
         tox_source = configparser.ConfigParser()
         tox_source.read_file(open(ini_path))
         testenv_deps = tox_source.get("testenv", "deps", fallback=None)
@@ -150,21 +162,25 @@ class DownstreamRunner:
             tox_source["testenv"]["deps"] = pytest_dep
         else:
             found_pytest = False
-            updated_deps = []
+            updated_deps = set()
             for dep in testenv_deps.split("\n"):
-                if dep.startswith("pytest") and not dep.startswith("pytest-"):
-                    has_gen = re.search(r"pytest\w*:", dep)
-                    if has_gen is not None:
-                        found_pytest = True
-                        updated_deps.insert(0, f"!{has_gen.group()} {pytest_dep}")
-                    updated_deps.append(dep)
-                else:
-                    updated_deps.append(dep)
+                for foo in DEPS:
+                    #breakpoint()
+                    if DEPS[foo]["condition"](dep):
+                        #has_gen = re.search(r"pytest\w*:", dep)
+                        if DEPS[foo]["has_gen"](dep) is not None:
+                            found_pytest = True
+                            #updated_deps.insert(0, f"!{has_gen.group()} {DEPS[foo]['src']}")
+                            updated_deps.add(f"!{has_gen.group()} {DEPS[foo]['src']}")
+                        updated_deps.add(DEPS[foo]["src"])
+                    else:
+                        updated_deps.add(dep)
             if not found_pytest:
-                updated_deps.insert(0, pytest_dep)
+                #updated_deps.insert(0, pytest_dep)
+                updated_deps.add(DEPS["pytest"]["src"])
                 
             tox_source["testenv"]["deps"] = "\n".join(updated_deps)
-
+        #breakpoint()
         with open(ini_path, "w") as f:
             tox_source.write(f)
 
