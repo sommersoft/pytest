@@ -378,7 +378,9 @@ def _in_venv(path: Path) -> bool:
 
 
 def pytest_ignore_collect(fspath: Path, config: Config) -> Optional[bool]:
-    ignore_paths = config._getconftest_pathlist("collect_ignore", path=fspath.parent)
+    ignore_paths = config._getconftest_pathlist(
+        "collect_ignore", path=fspath.parent, rootpath=config.rootpath
+    )
     ignore_paths = ignore_paths or []
     excludeopt = config.getoption("ignore")
     if excludeopt:
@@ -388,7 +390,7 @@ def pytest_ignore_collect(fspath: Path, config: Config) -> Optional[bool]:
         return True
 
     ignore_globs = config._getconftest_pathlist(
-        "collect_ignore_glob", path=fspath.parent
+        "collect_ignore_glob", path=fspath.parent, rootpath=config.rootpath
     )
     ignore_globs = ignore_globs or []
     excludeglobopt = config.getoption("ignore_glob")
@@ -546,12 +548,16 @@ class Session(nodes.FSCollector):
         # hooks with all conftest.py files.
         pm = self.config.pluginmanager
         my_conftestmodules = pm._getconftestmodules(
-            Path(fspath), self.config.getoption("importmode")
+            Path(fspath),
+            self.config.getoption("importmode"),
+            rootpath=self.config.rootpath,
         )
         remove_mods = pm._conftest_plugins.difference(my_conftestmodules)
         if remove_mods:
             # One or more conftests are not in use at this fspath.
-            proxy = FSHookProxy(pm, remove_mods)
+            from .config.compat import PathAwareHookProxy
+
+            proxy = PathAwareHookProxy(FSHookProxy(pm, remove_mods))
         else:
             # All plugins are active for this fspath.
             proxy = self.config.hook
@@ -561,9 +567,8 @@ class Session(nodes.FSCollector):
         if direntry.name == "__pycache__":
             return False
         fspath = Path(direntry.path)
-        path = legacy_path(fspath)
         ihook = self.gethookproxy(fspath.parent)
-        if ihook.pytest_ignore_collect(fspath=fspath, path=path, config=self.config):
+        if ihook.pytest_ignore_collect(fspath=fspath, config=self.config):
             return False
         norecursepatterns = self.config.getini("norecursedirs")
         if any(fnmatch_ex(pat, fspath) for pat in norecursepatterns):
@@ -573,7 +578,6 @@ class Session(nodes.FSCollector):
     def _collectfile(
         self, fspath: Path, handle_dupes: bool = True
     ) -> Sequence[nodes.Collector]:
-        path = legacy_path(fspath)
         assert (
             fspath.is_file()
         ), "{!r} is not a file (isdir={!r}, exists={!r}, islink={!r})".format(
@@ -581,9 +585,7 @@ class Session(nodes.FSCollector):
         )
         ihook = self.gethookproxy(fspath)
         if not self.isinitpath(fspath):
-            if ihook.pytest_ignore_collect(
-                fspath=fspath, path=path, config=self.config
-            ):
+            if ihook.pytest_ignore_collect(fspath=fspath, config=self.config):
                 return ()
 
         if handle_dupes:
@@ -595,7 +597,7 @@ class Session(nodes.FSCollector):
                 else:
                     duplicate_paths.add(fspath)
 
-        return ihook.pytest_collect_file(fspath=fspath, path=path, parent=self)  # type: ignore[no-any-return]
+        return ihook.pytest_collect_file(fspath=fspath, parent=self)  # type: ignore[no-any-return]
 
     @overload
     def perform_collect(
