@@ -167,7 +167,7 @@ class DownstreamRunner:
                 for foo in DEPS:
                     #breakpoint()
                     if DEPS[foo]["condition"](dep):
-                        #has_gen = re.search(r"pytest\w*:", dep)
+                        has_gen = re.search(r"pytest\w*:", dep)
                         if DEPS[foo]["has_gen"](dep) is not None:
                             found_pytest = True
                             #updated_deps.insert(0, f"!{has_gen.group()} {DEPS[foo]['src']}")
