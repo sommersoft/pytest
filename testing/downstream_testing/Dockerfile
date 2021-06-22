@@ -14,8 +14,8 @@ RUN set -ex; \
 				  keyserver.ubuntu.com \
 				  hkp://keyserver.ubuntu.com:80 \
 				  pgp.mit.edu; do \
-		gpg --keyserver "$server" --recv-keys "$key" && break || echo "Trying new keyserver..." \
-	done \
+		gpg --keyserver "$server" --recv-keys "$key" && break || echo "Trying new keyserver..."; \
+	done; \
 	gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
 	gpgconf --kill all; \
 	rm -rf "$GNUPGHOME"; \
