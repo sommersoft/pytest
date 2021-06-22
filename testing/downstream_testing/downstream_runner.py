@@ -174,6 +174,7 @@ class DownstreamRunner:
                         updated_deps.add(DEPS[foo]["src"])
                     else:
                         updated_deps.add(dep)
+                        # useless comment for new commit
             if not found_pytest:
                 #updated_deps.insert(0, pytest_dep)
                 updated_deps.add(DEPS["pytest"]["src"])
