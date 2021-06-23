@@ -152,11 +152,33 @@ class DownstreamRunner:
             "pytest-rerunfailures": {
                 "src": "pytest-rerunfailures @ git+https://github.com/pytest-dev/pytest-rerunfailures.git",
                 "condition": lambda x: x.startswith("pytest-rerunfailures"),
-                "has_gen": lambda x: None
+                "has_gen": lambda x: re.search(r"pytest-rerunfailures\w*:", x)
+                #"has_gen": lambda x: None
             }
         }
         tox_source = configparser.ConfigParser()
         tox_source.read_file(open(ini_path))
+        #updated_deps = set()
+        found_pytest = False
+        for section in tox_source.sections():
+            updated_deps = set()
+            section_deps = tox_source.get(section, "deps", fallback=None)
+            if section_deps:
+                for dep in section_deps.split("\n"):
+                    for check_dep in DEPS:
+                        if DEPS[check_dep]["condition"](dep):
+                            has_gen = DEPS[check_dep]["has_gen"](dep)
+                            if has_gen is not None and not found_pytest:
+                                found_pytest = True
+                                updated_deps.add(f"!{has_gen.group()} {DEPS[check_dep]['src']}")
+                            #updated_deps.add(DEPS[check_dep]["src"])
+                        #else:
+                        #    updated_deps.add(dep)
+                updated_deps = '\n'.join(updated_deps)
+                tox_source[section]["deps"] = f"{tox_source[section]['deps']}\n{updated_deps}"
+        #breakpoint()
+
+        """
         testenv_deps = tox_source.get("testenv", "deps", fallback=None)
         if testenv_deps is None:
             tox_source["testenv"]["deps"] = pytest_dep
@@ -174,12 +196,12 @@ class DownstreamRunner:
                         updated_deps.add(DEPS[foo]["src"])
                     else:
                         updated_deps.add(dep)
-                        # useless comment for new commit
             if not found_pytest:
                 #updated_deps.insert(0, pytest_dep)
                 updated_deps.add(DEPS["pytest"]["src"])
                 
             tox_source["testenv"]["deps"] = "\n".join(updated_deps)
+        """
         #breakpoint()
         with open(ini_path, "w") as f:
             tox_source.write(f)

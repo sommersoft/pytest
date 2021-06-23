@@ -19,7 +19,7 @@ jobs:
             docker_profile: "nodb"
             jobs: "build_python"
             workflow_name: "actions.yml"
-            matrix_exclude: ""
+            matrix_exclude: "devel-ubuntu"
           
           - name: "pytest-django"
             repo: "pytest-dev/pytest-django"
