@@ -51,6 +51,13 @@ jobs:
               py39-dj31-postgres-xdist-coverage py39-dj32-postgres-xdist-coverage py37-dj30-mysql_innodb-coverage
               py36-dj31-mysql_myisam-coverage py36-dj32-mysql_myisam-coverage
 
+          - name: "pytest-order"
+            repo: "pytest-dev/pytest-order"
+            docker_profile: "nodb"
+            jobs: "test"
+            workflow_name: "pythontests.yml"
+            matrix_exclude: ""
+
     steps:
     - uses: actions/checkout@v2
       with:
